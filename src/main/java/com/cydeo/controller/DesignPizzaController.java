@@ -16,7 +16,11 @@ import java.util.UUID;
 
 public class DesignPizzaController {
 
-    private PizzaRepository pizzaRepository;
+    private final PizzaRepository pizzaRepository;
+
+    public DesignPizzaController(PizzaRepository pizzaRepository) {
+        this.pizzaRepository = pizzaRepository;
+    }
 
     @GetMapping
     public String showDesignForm(Model model) {
@@ -30,7 +34,7 @@ public class DesignPizzaController {
     }
 
     @PostMapping("/createPizza")
-    public String processPizza(Pizza pizza) {
+    public String processPizza(Pizza pizza) { // localhost:8080/design/createPizza
 
         pizza.setId(UUID.randomUUID());
         pizzaRepository.createPizza(pizza);
