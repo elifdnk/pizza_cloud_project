@@ -25,7 +25,6 @@ public class OrderController {
 
         PizzaOrder pizzaOrder = new PizzaOrder();
 
-        // Fix the getPizza method below in line 49.
         pizzaOrder.setPizza(getPizza(pizzaId));
 
         model.addAttribute("pizzaOrder", pizzaOrder);
@@ -36,18 +35,18 @@ public class OrderController {
     @PostMapping("/{pizzaId}")
     public String processOrder(@PathVariable UUID pizzaId, PizzaOrder pizzaOrder) {
 
-        // Save the order
 
+        pizzaRepository.savePizzaOrder(pizzaOrder);
         pizzaOrder.setPizza(getPizza(pizzaId));
         return "redirect:/home";
     }
 
 
-    private Pizza getPizza(UUID pizzaId)  throws  PizzaNotFoundException{
+    private Pizza getPizza(UUID pizzaId) throws PizzaNotFoundException {
 
         return pizzaRepository.readAll().stream()
                 .filter(pizza -> pizza.getId().equals(pizzaId))
-                .findFirst().orElseThrow(()->new PizzaNotFoundException("Pizza not found"));
+                .findFirst().orElseThrow(() -> new PizzaNotFoundException("Pizza not found"));
     }
 
 }
