@@ -1,14 +1,12 @@
 package com.cydeo.controller;
 
+import com.cydeo.exception.PizzaNotFoundException;
 import com.cydeo.model.Pizza;
 import com.cydeo.model.PizzaOrder;
 import com.cydeo.repository.PizzaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -36,7 +34,7 @@ public class OrderController {
     }
 
     @PostMapping("/{pizzaId}")
-    public String processOrder(UUID pizzaId, PizzaOrder pizzaOrder) {
+    public String processOrder(@PathVariable UUID pizzaId, PizzaOrder pizzaOrder) {
 
         // Save the order
 
@@ -44,10 +42,12 @@ public class OrderController {
         return "redirect:/home";
     }
 
-    //TODO
-    private Pizza getPizza(UUID pizzaId) {
-        // Get the pizza from repository based on it's id
-        return new Pizza();
+
+    private Pizza getPizza(UUID pizzaId)  throws  PizzaNotFoundException{
+
+        return pizzaRepository.readAll().stream()
+                .filter(pizza -> pizza.getId().equals(pizzaId))
+                .findFirst().orElseThrow(()->new PizzaNotFoundException("Pizza not found"));
     }
 
 }
